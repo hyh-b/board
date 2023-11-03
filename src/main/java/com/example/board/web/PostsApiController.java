@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostsApiController {
 
     private final PostsService postsService;
-
+    //REST에서 CRUD는 다음과 같이 HTTP Method에 매핑 - 생성:POST, 읽기:GET, 수정:PUT, 삭제:DELETE
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody PostsSaveRequestDto requestDto){
 
@@ -28,6 +28,14 @@ public class PostsApiController {
 
     @GetMapping("/api/v1/posts/{id}")
     public PostsResponseDto findById(@PathVariable Long id){
+
         return postsService.findById(id);
     }
+
+    @DeleteMapping("api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id){
+        postsService.delete(id);
+        return id;
+    }
+
 }

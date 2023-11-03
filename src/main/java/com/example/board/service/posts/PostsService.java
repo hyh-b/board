@@ -2,12 +2,16 @@ package com.example.board.service.posts;
 
 import com.example.board.domain.posts.Posts;
 import com.example.board.domain.posts.PostsRepository;
+import com.example.board.web.Dto.PostsListResponseDto;
 import com.example.board.web.Dto.PostsResponseDto;
 import com.example.board.web.Dto.PostsSaveRequestDto;
 import com.example.board.web.Dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,5 +42,21 @@ public class PostsService {
                 IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         return new PostsResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true)  //(readOnly = true)옵션 - 조회기능만 남겨둔다. 그에 따라 조회속도 개선
+    public List<PostsListResponseDto> findAllDesc(){
+        return postsRepository.findAllDesc().stream() //stream - 자바8버전부터 생긴 반복문 병렬 처리기법.
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    //PostsRepository결과로 넘어온 Posts의 Stream을 map을 통해 PostListResponseDto 변환 -> List로 반환하는 메서드
+    }
+
+    @Transactional
+    public void delete (Long id){
+        Posts posts = postsRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
+
+        postsRepository.delete(posts); //JpaRepository에서 delete 메소드를 지원
     }
 }
