@@ -43,7 +43,8 @@ dependencies {
 	implementation('com.h2database:h2:')
 	//thymeleaf
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf:')
-
+	//oauth2
+	implementation('org.springframework.boot:spring-boot-starter-oauth2-client:')
 
 }
 
