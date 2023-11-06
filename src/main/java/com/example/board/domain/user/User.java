@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor  //기본 생성자 생성
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
