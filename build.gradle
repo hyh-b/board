@@ -57,5 +57,7 @@ tasks.named('test') {
 }
 
 jar {
-	enabled = false
+	//enabled = false
+	enabled=true
+	archiveClassifier = '' // Classifier 제거
 }
