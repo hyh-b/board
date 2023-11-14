@@ -50,6 +50,8 @@ dependencies {
 	//security 테스트
 	implementation('org.springframework.security:spring-security-test:')
 	testImplementation('org.springframework.security:spring-security-test:')
+	//MariaDB
+	implementation('org.mariadb.jdbc:mariadb-java-client:')
 }
 
 tasks.named('test') {
