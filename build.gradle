@@ -45,7 +45,11 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf:')
 	//oauth2
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client:')
-
+	//jdbc
+	implementation('org.springframework.session:spring-session-jdbc:')
+	//security 테스트
+	implementation('org.springframework.security:spring-security-test:')
+	testImplementation('org.springframework.security:spring-security-test:')
 }
 
 tasks.named('test') {

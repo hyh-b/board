@@ -24,7 +24,7 @@ public class IndexControllerTest {
         // "/"경로로 get요청을 보낸 뒤 응답 본문을 문자열로 받아 변수 body에 할당
 
         //then
-        assertThat(body).contains("hello");
+        assertThat(body).contains("스프링부트");
         // body에 "hello"가 포함되어 있는지 확인
     }
 }
