@@ -1,0 +1,13 @@
+header{
+    text-align: center;
+    padding: 15px;
+}
+
+.container{
+    width: 80%;
+    margin-top: 5px;
+}
+
+#write {
+    margin-left: 50px;
+}
