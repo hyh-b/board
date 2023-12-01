@@ -54,6 +54,8 @@ dependencies {
 	testImplementation('org.springframework.security:spring-security-test:')
 	//MariaDB
 	implementation('org.mariadb.jdbc:mariadb-java-client:')
+	//정적페이지 바로 반영
+	developmentOnly("org.springframework.boot:spring-boot-devtools:")
 
 }
 

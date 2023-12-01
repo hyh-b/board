@@ -8,6 +8,7 @@ header{
     margin-top: 5px;
 }
 
-#write {
-    margin-left: 50px;
+#pageNumber{
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center;
 }

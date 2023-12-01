@@ -18,10 +18,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link " href="#">뉴스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="#">채팅</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -61,7 +61,7 @@
                     <a href="/oauth2/authorization/kakao" class="btn btn-secondary active" role="button">Kakao Login</a>
 -->              </th:block>
 
-                <a href="/posts/save" role="button" class="btn btn-primary" id="write">글쓰기</a>
+                <a href="/posts/save" role="button" class="btn btn-primary" >글쓰기</a>
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@
             <th>작성자</th>
             <th>추천수</th>
             <th>조회수</th>
-            <th>최종수정일</th>
+            <th>작성일</th>
         </tr>
         </thead>
         <tbody id="tbody">
@@ -90,5 +90,31 @@
             </tr>
         </tbody>
     </table>
+
+    <div>
+        <ul class="pagination pagination-lg" id="pageNumber">
+            <li class="page-item disabled">
+                <a class="page-link" href="#">&laquo;</a>
+            </li>
+            <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">4</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">5</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">&raquo;</a>
+            </li>
+        </ul>
+    </div>
 </div>
 <div th:insert="layout/footer.html"></div>
