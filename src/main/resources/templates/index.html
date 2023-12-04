@@ -93,28 +93,28 @@
 
     <div>
         <ul class="pagination pagination-lg" id="pageNumber">
-            <li class="page-item disabled">
-                <a class="page-link" href="#">&laquo;</a>
+            <!-- 첫 페이지로 이동 -->
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=0, size=${page.size})}">&laquo;&laquo;</a>
             </li>
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
+            <!-- 이전 페이지 그룹의 마지막 페이지로 이동 -->
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${prevPageGroupEnd - 1}, size=${page.size})}">&laquo;</a>
             </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
+            <!-- 페이지 번호 -->
+            <li th:each="i : ${#numbers.sequence(startPage, endPage)}" class="page-item" th:classappend="${i == currentPage + 1 ? 'active' : ''}">
+                <a class="page-link" th:href="@{/?(page=${i - 1}, size=${page.size})}" th:text="${i}"></a>
             </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
+            <!-- 다음 페이지 그룹의 첫 페이지로 이동 -->
+            <li class="page-item" th:classappend="${currentPage + 1 == totalPages ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${nextPageGroupStart}, size=${page.size})}">&raquo;</a>
             </li>
-            <li class="page-item">
-                <a class="page-link" href="#">4</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">5</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">&raquo;</a>
+            <!-- 마지막 페이지로 이동 -->
+            <li class="page-item" th:classappend="${currentPage / 5 >= page.totalPages / 5 - 1 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${page.totalPages - 1}, size=${page.size})}">&raquo;&raquo;</a>
             </li>
         </ul>
     </div>
+
 </div>
 <div th:insert="layout/footer.html"></div>

@@ -7,6 +7,9 @@ import com.example.board.web.Dto.PostsResponseDto;
 import com.example.board.web.Dto.PostsSaveRequestDto;
 import com.example.board.web.Dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,5 +61,9 @@ public class PostsService {
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
 
         postsRepository.delete(posts); //JpaRepository에서 delete 메소드를 지원
+    }
+
+    public Page<Posts> findAll(Pageable pageable){
+        return postsRepository.findAll(pageable);
     }
 }
