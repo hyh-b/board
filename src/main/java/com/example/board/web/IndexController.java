@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,17 +30,19 @@ public class IndexController {
         //model.addAttribute("posts", postsService.findAllDesc());
 
         int size = 10;
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("Id").descending());
         Page<Posts> postsPage = postsService.findAll(pageable);
 
         int currentPage = postsPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
         int totalPages = postsPage.getTotalPages(); // 총 페이지 수
+        int countPage = (currentPage)/5;
+        int countEnd = (totalPages-1)/5;
 
-        int nextPageGroupStart = Math.min((currentPage / 5 + 1) * 5, totalPages - 1);
-        int prevPageGroupEnd = (currentPage / 5 - 1) * 5 + 4;
+        int nextPageGroupStart = countPage*5+5;
+        int prevPageGroupEnd = countPage*5-1;
 
-        int startPage = Math.max(0, ((postsPage.getNumber() + 1) / 5) * 5 - 1);
-        int endPage = Math.min(startPage + 4, postsPage.getTotalPages() - 1);
+        int startPage = countPage*5 +1;
+        int endPage = startPage+4;
 
         model.addAttribute("posts",postsPage.getContent());
         model.addAttribute("page",postsPage);
@@ -49,10 +52,12 @@ public class IndexController {
         model.addAttribute("prevPageGroupEnd", prevPageGroupEnd);
         model.addAttribute("currentPage",currentPage);
         model.addAttribute("totalPage",totalPages);
+        model.addAttribute("countEnd",countEnd);
 
         System.out.println("숫자-=========="+postsPage.getNumber());
         System.out.println("총숫사-=========="+postsPage.getTotalPages());
         System.out.println("시작페이지-=========="+startPage);
+        System.out.println("카운트페이지-=========="+countPage);
         System.out.println("엔드페이지-=========="+endPage);
         //SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if(user != null){

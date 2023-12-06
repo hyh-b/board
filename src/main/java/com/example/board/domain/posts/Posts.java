@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor //기본 생성자 자동 추가
 @Entity //db의 테이블과 링크될 클래스임을 나타냄
+@Table(name = "post")
 public class Posts extends BaseTimeEntity {   //BaseTimeEntity를 상속받아 생성, 수정시간 자동 생성
 
     @Id //해당 테이블의 pk필드를 나타냄
