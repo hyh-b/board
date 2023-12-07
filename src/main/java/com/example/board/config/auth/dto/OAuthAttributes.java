@@ -5,6 +5,7 @@ import com.example.board.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Date;
 import java.util.Map;
 
 @Getter
@@ -13,16 +14,16 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String name;
     private String email;
-    private String picture;
+    private String social;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-                           String name, String email, String picture) {
+                           String name, String email, String social) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
-        this.picture = picture;
+        this.social = social;
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName,
@@ -45,7 +46,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
+                .social("google")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -57,7 +58,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
-                .picture((String) response.get("profile_image"))
+                .social("naver")
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -71,7 +72,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) response.get("email"))
-                .picture((String) profile.get("profile_image_url"))
+                .social("kakao")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -81,8 +82,8 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
                 .role(Role.USER)
+                .social(social)
                 .build();
     }
 }
