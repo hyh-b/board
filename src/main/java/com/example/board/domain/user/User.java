@@ -46,11 +46,13 @@ public class User {
     private String password;
 
     @Builder
-    public User(String name, String email, Role role, String social){
+    public User(String name, String email, Role role, String social,String id, String password){
         this.name = name;
         this.email = email;
         this.role = role;
         this.social = social;
+        this.id = id;
+        this.password = password;
     }
 
     public  User update(String name, String social){

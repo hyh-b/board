@@ -4,31 +4,44 @@
     <meta charset="UTF-8">
     <title>회원가입</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .signup-container {
+            width: 60%;
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+    </style>
 </head>
 <body>
-
-    <form>
-        <fieldset>
-            <legend>Legend</legend>
-            <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com">
+    <div class="signup-container">
+        <form action="signup_ok" method="post">
+            <fieldset>
+                <legend>회원가입</legend>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="inputDefault">아이디</label>
+                    <input type="text" class="form-control" placeholder="id" id="inputDefault" name="id">
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off">
-            </div>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="inputDefault">이름</label>
+                    <input type="text" class="form-control" placeholder="name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4">이메일</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="inputDefault">비밀번호</label>
+                    <input type="text" class="form-control" placeholder="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="inputDefault">비밀번호확인</label>
+                    <input type="text" class="form-control" placeholder="check password" >
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </fieldset>
-    </form>
-
+    <script src="/js/app/index.js"></script>
 </body>
 </html>
