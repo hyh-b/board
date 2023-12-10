@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,22 +22,32 @@ public class SignInController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("signin")
-    public String signin(){
+    public String signin(@RequestParam(value = "error", required = false) String error){
+        if (error != null){
+            return "index";
+        }
         return "signin";
     }
 
     @GetMapping("signup")
     public String signup(){
+
         return "signup";
+    }
+
+    @GetMapping("signok")
+    public String signok(){
+
+        return "signok";
     }
 
     @PostMapping("/signup_ok")
     public String signup_ok(HttpServletRequest request){
 
-        System.out.println("리퀘스트"+request.getParameter("id"));
-        System.out.println("리퀘스트"+request.getParameter("name"));
-        System.out.println("리퀘스트"+request.getParameter("password"));
         userService.signupUser(request);
         return "signin";
     }

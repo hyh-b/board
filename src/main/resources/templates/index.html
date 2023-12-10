@@ -49,17 +49,17 @@
         <div class="row">
             <div class="col-md-12">
 
-                <th:block th:if="${username}">
+                <!--<th:block th:if="${username}">
                     Logged in as: <span id="user" th:text="${username}"></span>
                     <a href="/logout" class="btn btn-info active" role="button">Logout</a>
                 </th:block>
                 <th:block th:unless="${username}">
                     <a href="/signin" class="btn btn-outline-primary" role="button">로그인</a>
                     <a href="/signup" class="btn btn-outline-primary" role="button">회원가입</a>
-                    <!--<a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                    &lt;!&ndash;<a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
                     <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
                     <a href="/oauth2/authorization/kakao" class="btn btn-secondary active" role="button">Kakao Login</a>
--->              </th:block>
+&ndash;&gt;              </th:block>-->
 
                 <a href="/posts/save" role="button" class="btn btn-primary" >글쓰기</a>
             </div>

@@ -1,6 +1,8 @@
 package com.example.board.web;
 
 import com.example.board.config.auth.LoginUser;
+import com.example.board.config.auth.SecurityUtils;
+import com.example.board.config.auth.dto.CustomUserDetails;
 import com.example.board.config.auth.dto.SessionUser;
 import com.example.board.domain.posts.Posts;
 import com.example.board.service.posts.PostsService;
@@ -54,15 +56,17 @@ public class IndexController {
         model.addAttribute("totalPage",totalPages);
         model.addAttribute("countEnd",countEnd);
 
-        System.out.println("숫자-=========="+postsPage.getNumber());
-        System.out.println("총숫사-=========="+postsPage.getTotalPages());
-        System.out.println("시작페이지-=========="+startPage);
-        System.out.println("카운트페이지-=========="+countPage);
-        System.out.println("엔드페이지-=========="+endPage);
-        //SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
         if(user != null){
             model.addAttribute("username",user.getName());
             //System.out.println("유저네임"+user.getName());
+        }
+
+        CustomUserDetails customUserDetails = SecurityUtils.getCurrentUserDetails();
+        if(customUserDetails != null){
+            System.out.println("아이디"+customUserDetails.getUsername());
+            System.out.println("비번"+customUserDetails.getPassword());
+            System.out.println("ahens"+customUserDetails.getAuthorities());
         }
         return "index";
     }
@@ -70,6 +74,11 @@ public class IndexController {
     @GetMapping("/posts/save")
     public String postsSave(){
         return "posts-save";
+    }
+
+    @GetMapping("/posts")
+    public String posts(){
+        return "posts";
     }
 
     @GetMapping("/posts/update/{id}")
