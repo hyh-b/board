@@ -76,9 +76,9 @@ public class IndexController {
         return "posts-save";
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/post/view")
     public String posts(){
-        return "posts";
+        return "post-view";
     }
 
     @GetMapping("/posts/update/{id}")

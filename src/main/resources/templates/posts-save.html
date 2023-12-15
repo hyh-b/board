@@ -1,4 +1,16 @@
-<div th:insert="layout/header.html"></div> <!-- th:insert="파일명" - 해당파일을 삽입한다-->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/summernote/summernote-lite.js"></script>
+    <script src="/summernote/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="/summernote/summernote-lite.css">
+</head>
+<body>
 
 <h1>게시글 등록</h1>
 
@@ -23,4 +35,74 @@
     </div>
 </div>
 
-<div th:insert="layout/footer.html"></div>
+<textarea id="summernote" name="content"></textarea>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+<script>
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            // 썸머노트 옵션 설정
+            codeviewFilter: false,
+            codeviewIframeFilter: false,
+            disableXSSProtection: true,
+            height: 500,
+            minHeight: null,
+            maxHeight: null,
+            focus: true,
+            lang: 'ko-KR',
+            toolbar: [
+                // 스타일 관련 기능
+                ['style', ['style']],
+                // 글자 크기 설정
+                ['fontsize', ['fontsize']],
+                // 글꼴 스타일
+                ['font', ['bold', 'underline', 'clear']],
+                // 글자 색상
+                ['color', ['color']],
+                // 테이블 삽입
+                ['table', ['table']],
+                // 문단 스타일
+                ['para', ['paragraph']],
+                // 에디터 높이 설정
+                ['height', ['height']],
+                // 이미지, 링크, 동영상 삽입
+                ['insert', ['picture', 'link', 'video']],
+                // 코드 보기, 전체화면, 도움말
+                ['view', ['codeview', 'fullscreen', 'help']],
+            ],
+            fontSizes: [
+                // 글자 크기 선택 옵션
+                '8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'
+            ],
+            styleTags: [
+                // 스타일 태그 옵션
+                'p',
+                { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
+                'pre',
+                { title: 'code_light', tag: 'pre', className: 'code_light', value: 'pre' },
+                { title: 'code_dark', tag: 'pre', className: 'code_dark', value: 'pre' },
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+            ],
+
+            callbacks: {
+                onImageUpload: function (files, editor, welEditable) {
+                    // 파일 업로드
+                    for (var i = files.length - 1; i >= 0; i--) {
+                        var fileName = files[i].name
+                        var caption = prompt('이미지 설명:', fileName)
+                        if (caption == '') {
+                            caption = '이미지'
+                        }
+
+                    }
+                },
+
+
+            },
+        })
+    })
+</script>
+</body>
+</html>
