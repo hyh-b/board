@@ -4,21 +4,31 @@ import com.example.board.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 @Getter
 @Setter
-public class CustomUserDetails implements UserDetails {
-
+public class CustomUserDetails implements UserDetails{
     private User user;
+
+    private Long seq;
+    private String name;
+    private String email;
+    private String role;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user){
         this.user = user;
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
-    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public String getPassword(){

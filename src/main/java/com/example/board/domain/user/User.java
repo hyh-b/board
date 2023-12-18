@@ -46,14 +46,18 @@ public class User implements Serializable {
     @Column(name = "m_password")
     private String password;
 
+    @Column(name = "m_socialid")
+    private String socialid;
+
     @Builder
-    public User(String name, String email, Role role, String social,String id, String password){
+    public User(String name, String email, Role role, String social,String id, String password, String socialid){
         this.name = name;
         this.email = email;
         this.role = role;
         this.social = social;
         this.id = id;
         this.password = password;
+        this.socialid = socialid;
     }
 
     public  User update(String name, String social){

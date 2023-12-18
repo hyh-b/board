@@ -35,18 +35,4 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public void printUser(String id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            System.out.println("아이디"+user.getId());
-            System.out.println("비번"+user.getPassword());
-            System.out.println("소셜"+user.getSocial());
-        } else {
-            System.out.println("User not found with id: " + id);
-        }
-    }
-
-
-
 }

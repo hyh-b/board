@@ -9,10 +9,61 @@
             width: 60%;
             margin: 0 auto; /* 가운데 정렬 */
         }
+
+        header{
+            text-align: center;
+            padding: 15px;
+        }
     </style>
 
 </head>
 <body>
+
+    <header>
+        <h1><a href="/" style="text-decoration: none;">자유게시판</a></h1>
+    </header>
+
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#">뉴스</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">채팅</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-sm-2" type="search" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
     <div class="login-container">
         <form action="/signin_ok" method="post">
             <fieldset>
@@ -27,7 +78,7 @@
                     <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password" autocomplete="off">
                 </div>
                 <Br>
-                <a href="/oauth2/authorization/google" class="btn btn-secondary" role="button">Google Login</a>
+                <a href="/oauth2/authorization/google" class="btn btn-outline-primary" role="button">Google Login</a>
                 <a href="/oauth2/authorization/naver" class="btn btn-success" role="button">Naver Login</a>
                 <a href="/oauth2/authorization/kakao" class="btn btn-warning" role="button">Kakao Login</a>
                 <br><br>

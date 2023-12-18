@@ -28,4 +28,9 @@ public class CustomUserDetailService implements UserDetailsService {
         return new CustomUserDetails(user);
 
     }
+
+    public User loadUser(String id){
+
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found with social id: "));
+    }
 }

@@ -31,17 +31,21 @@ public class SecurityConfig {
                 .headers().frameOptions().disable() //h2-console 화면을 사용하기 위해 해당 옵션들을 disable
                 .and()
                     .authorizeRequests() //URL별 권환 관리 설정
-                    .antMatchers("/","/css/**","/images/**","/js/**","/h2-console/**","/profile").permitAll()
-                    //.antMatchers("/api/v1/**").hasRole(Role.USER.name())
+                    /*.antMatchers("/","/css/**","/images/**","/js/**","/h2-console/**","/profile").permitAll()
+                    .antMatchers("/api/v1/**").hasRole(Role.USER.name())*/
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
                         .loginPage("/signin")
                         .loginProcessingUrl("/signin_ok")
-                        .defaultSuccessUrl("/signok", true)
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/signin?error")
                 .and()
+                    .logout()
+                    .logoutSuccessUrl("/")
+                .and()
                     .oauth2Login() //oauth2 로그인 기능 설정
+                        //.defaultSuccessUrl("/", true)
                         .userInfoEndpoint() //로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
                             .userService(customOAuth2UserService); // 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페이스의 구현체를 등록. 리소스 서버(즉, 소설 서비스)에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능을 명시
 

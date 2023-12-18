@@ -16,5 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select m from User m where m.id = ?1")
     Optional<User> findById(String id);
 
+    @Query("select m from User m where m.socialid = ?1")
+    Optional<User> findBySocialid(String socialid);
+
+
 
 }

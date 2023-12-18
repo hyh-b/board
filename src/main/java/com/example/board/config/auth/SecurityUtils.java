@@ -9,14 +9,14 @@ public class SecurityUtils {
     public static CustomUserDetails getCurrentUserDetails(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())){
+        /*if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())){
             return  null;
         }
 
         Object principal = authentication.getPrincipal();
         if(principal instanceof CustomUserDetails){
             return (CustomUserDetails) principal;
-        }
+        }*/
 
         return null;
     }

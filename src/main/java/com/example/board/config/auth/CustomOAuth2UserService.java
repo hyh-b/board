@@ -6,6 +6,7 @@ import com.example.board.domain.user.User;
 import com.example.board.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +38,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         OAuthAttributes attributes = OAuthAttributes  //OAuth2Service를 통해 가져온 OAuth2User의 attribute를 담을 클래스
-                .of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+                .of(registrationId, oAuth2User.getAttributes());
+        System.out.println("소셜로그인>>>>>>>>>>");
 
         User user = saveOrUpdate(attributes);
 
@@ -46,6 +49,32 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
+    }
+
+
+    public User loadUser(OAuth2User oAuth2User, String registrationId) {
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        String socialId;
+
+        switch (registrationId) {
+            case "naver":
+                socialId = (String) attributes.get("id");
+                break;
+            case "kakao":
+                Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+                socialId = String.valueOf(attributes.get("id"));
+                break;
+            case "google":
+                socialId = (String) attributes.get("sub");
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported registration id: " + registrationId);
+        }
+
+        User user = userRepository.findBySocialid(socialId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with social id: " + socialId));
+
+        return user;
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {

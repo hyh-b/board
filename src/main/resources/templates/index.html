@@ -1,4 +1,14 @@
-<div th:insert="layout/header.html"></div> <!-- th:insert="파일명" - 해당파일을 삽입한다-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
+</head>
+<body>
 
 <header>
     <h1>자유게시판</h1>
@@ -46,23 +56,14 @@
 </nav>
 <div class="container">
     <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-12">
-
-                <!--<th:block th:if="${username}">
-                    Logged in as: <span id="user" th:text="${username}"></span>
-                    <a href="/logout" class="btn btn-info active" role="button">Logout</a>
-                </th:block>
-                <th:block th:unless="${username}">
-                    <a href="/signin" class="btn btn-outline-primary" role="button">로그인</a>
-                    <a href="/signup" class="btn btn-outline-primary" role="button">회원가입</a>
-                    &lt;!&ndash;<a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
-                    <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
-                    <a href="/oauth2/authorization/kakao" class="btn btn-secondary active" role="button">Kakao Login</a>
-&ndash;&gt;              </th:block>-->
-
-                <a href="/posts/save" role="button" class="btn btn-primary" >글쓰기</a>
-            </div>
+        <div sec:authorize="isAuthenticated()">
+            <span th:text="${user.getName()}+'님'"></span>
+            <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+            <a href="/posts/save" role="button" class="btn btn-primary" >글쓰기</a>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/signin" class="btn btn-outline-primary" role="button">로그인</a>
+            <a href="/posts/save" role="button" class="btn btn-primary" >글쓰기</a>
         </div>
     </div>
 
