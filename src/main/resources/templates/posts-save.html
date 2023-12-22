@@ -8,32 +8,43 @@
     <style>
         .container { max-width: 60%; }
         .divider { border-bottom: 1px solid #eaeaea; margin: 20px 0; }
+        header a{
+            text-align: center;
+            padding: 15px;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
+
+<header>
+    <a href="/"><h1>자유게시판</h1></a>
+</header>
+
 <div class="container mt-5">
     <h2 class="mb-4">게시물 작성하기</h2>
-    <form>
+    <form enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
-            <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요">
+            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea class="form-control" id="content" rows="5" placeholder="내용을 입력하세요"></textarea>
+            <textarea class="form-control" id="content" name="content" rows="5" placeholder="내용을 입력하세요"></textarea>
         </div>
         <div class="mb-3">
-            <label for="files" class="form-label">파일 업로드</label>
-            <input type="file" class="form-control" id="files" name="files" multiple>
+            <label for="mfiles" class="form-label">파일 업로드</label>
+            <input type="file" class="form-control" id="mfiles" name="mfiles" multiple>
         </div>
         <div class="mb-3">
-            <button type="submit" class="btn btn-outline-primary">등록</button>
+            <button type="button" class="btn btn-outline-primary" id="btn-save">등록</button>
             <button type="button" class="btn btn-outline-primary">취소</button>
         </div>
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/app/index.js"></script>
 </body>
 </html>

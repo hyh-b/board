@@ -75,47 +75,53 @@
             <th>게시글번호</th>
             <th>제목</th>
             <th>작성자</th>
+            <th>조회수</th>
+            <th>추천수</th>
             <th>작성일</th>
         </tr>
         </thead>
         <tbody id="tbody">
             <tr th:each="post : ${posts}">
-                <td th:text="${post.id}"></td>
-                <td><a th:href="@{/posts/update/{id}(id=${post.id})}" th:text="${post.title}"></a></td>
-                <td th:text="${post.author}"></td>
-                <td th:text="${post.modifiedDate}"></td>
+                <td th:text="${post.getSeq()}"></td>
+                <td>
+                    <a th:href="@{/posts/view/{seq}(seq=${post.getSeq()})}" th:text="${post.title}"></a>
+                </td>
+                <td th:text="${post.getUser().getName()}"></td>
+                <td th:text="${post.getHit()}"></td>
+                <td th:text="${post.getLike()}"></td>
+                <td th:text="${post.getTime()}"></td>
             </tr>
         </tbody>
     </table>
 
     <div>
         <ul class="pagination pagination-lg" id="pageNumber">
-            <!-- 첫 페이지로 이동 -->
-            <li class="page-item" th:classappend="${currentPage < 5 ? 'disabled' : ''}">
+            <!--  <<버튼  -->
+            <li class="page-item" th:classappend="${pagingInfo.getCurrentPage() < 5 ? 'disabled' : ''}">
                 <a class="page-link" th:href="@{/?(page=0)}">&laquo;&laquo;</a>
             </li>
-            <!-- 이전 페이지 그룹의 마지막 페이지로 이동 -->
-            <li class="page-item" th:classappend="${currentPage < 5 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{/?(page=${prevPageGroupEnd})}">&laquo;</a>
+            <!--  <버튼  -->
+            <li class="page-item" th:classappend="${pagingInfo.getCurrentPage() < 5 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${pagingInfo.getPrevPageGroupEnd})}">&laquo;</a>
             </li>
-            <!-- 페이지 번호 -->
-            <th:block th:if= "${currentPage >= countEnd*5}">
-                <li th:each="i : ${#numbers.sequence(startPage, totalPage)}" class="page-item" th:classappend="${i -1 == currentPage ? 'active' : ''}">
+            <!--  번호  -->
+            <th:block th:if= "${pagingInfo.getCurrentPage() >= pagingInfo.getCountEnd()*5}">
+                <li th:each="i : ${#numbers.sequence(pagingInfo.getStartPage(), pagingInfo.getTotalPages())}" class="page-item" th:classappend="${i -1 == pagingInfo.getCurrentPage() ? 'active' : ''}">
                     <a class="page-link" th:href="@{/?(page=${i}-1)}" th:text="${i}"></a>
                 </li>
             </th:block>
-            <th:block th:unless="${currentPage >= countEnd*5}">
-                <li th:each="i : ${#numbers.sequence(startPage, endPage)}" class="page-item" th:classappend="${i -1 == currentPage ? 'active' : ''}">
+            <th:block th:unless="${pagingInfo.getCurrentPage() >= pagingInfo.getCountEnd()*5}">
+                <li th:each="i : ${#numbers.sequence(pagingInfo.getStartPage(), pagingInfo.getEndPage())}" class="page-item" th:classappend="${i -1 == pagingInfo.getCurrentPage() ? 'active' : ''}">
                     <a class="page-link" th:href="@{/?(page=${i}-1)}" th:text="${i}"></a>
                 </li>
             </th:block>
-            <!-- 다음 페이지 그룹의 첫 페이지로 이동 -->
-            <li class="page-item" th:classappend="${currentPage >= countEnd*5 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{/?(page=${nextPageGroupStart})}">&raquo;</a>
+            <!--  >버튼  -->
+            <li class="page-item" th:classappend="${pagingInfo.getCurrentPage() >= pagingInfo.getCountEnd()*5 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${pagingInfo.getNextPageGroupStart()})}">&raquo;</a>
             </li>
-            <!-- 마지막 페이지로 이동 -->
-            <li class="page-item" th:classappend="${currentPage >= countEnd*5 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{/?(page=${page.totalPages}-1)}">&raquo;&raquo;</a>
+            <!--  >>버튼  -->
+            <li class="page-item" th:classappend="${pagingInfo.getCurrentPage() >= pagingInfo.getCountEnd()*5 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/?(page=${pagingInfo.getTotalPages()}-1)}">&raquo;&raquo;</a>
             </li>
         </ul>
     </div>

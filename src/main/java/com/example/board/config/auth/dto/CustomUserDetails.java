@@ -29,6 +29,9 @@ public class CustomUserDetails implements UserDetails{
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
+    public Long getSeq(){
+        return user.getSeq();
+    }
 
     @Override
     public String getPassword(){

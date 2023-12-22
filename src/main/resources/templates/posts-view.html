@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +7,71 @@
     <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        header a{
+            text-align: center;
+            padding: 15px;
+            text-decoration: none;
+        }
         .container { max-width: 60%; }
         .divider { border-bottom: 1px solid #eaeaea; margin: 20px 0; }
         .reply-input, .sub-comment { display: none; margin-left: 20px; }
         .comment-text { cursor: pointer; }
         .sub-comment { display: block; }
         .sub-comment:before { content: "ㄴ "; }
+        .card-body {
+            min-height: 500px;
+            position: relative;
+        }
+        .post-content {
+            margin-bottom: 20px; /* 내용과 이미지 사이의 간격 */
+        }
+        .post-images img {
+            max-width: 100%; /* 이미지가 컨테이너 너비를 넘지 않도록 설정 */
+            height: auto; /* 이미지 비율 유지 */
+            margin-bottom: 60px; /* 이미지와 추천 버튼 사이의 간격 */
+        }
+        #likeButton {
+            display: block; /* 버튼을 블록 요소로 만들어 줄 전체를 차지하게 합니다. */
+            margin: 0 auto; /* 상하 마진은 0, 좌우 마진은 자동으로 설정하여 가운데 정렬합니다. */
+            position: absolute; /* 절대적 위치 설정 */
+            bottom: 10px; /* 아래에서 10px의 위치에 버튼을 배치 */
+            left: 50%; /* 왼쪽에서 50% 위치에 배치 */
+        }
     </style>
 </head>
 <body>
+
+<header>
+    <a href="/"><h1>자유게시판</h1></a>
+</header>
+
 <div class="container mt-5">
     <div class="card">
         <div class="card-body">
-            <h3 class="card-title">게시물 제목</h3>
-            <h6 class="card-subtitle mb-2 text-muted">작성자: 홍길동 | 작성 날짜: 2023-12-15</h6>
+            <h3 class="card-title" th:text="${post.getTitle()}">제목</h3>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="'작성자: ' + ${post.user.getName()} + ' | 작성 날짜: ' + ${#temporals.format(post.getTime(), 'yyyy-MM-dd')} + ' | 조회수 ' + ${post.getHit()}">작성자 | 작성 날짜 | 조회수 </h6>
             <div class="divider"></div>
-            <p class="card-text">여기에 게시물 내용이 들어갑니다...</p>
-            <button class="btn btn-outline-info">추천 0</button>
+            <div class="post-content">
+                <p class="card-text" th:text="${post.getContent()}">내용</p>
+            </div>
+
+            <!-- 이미지 -->
+            <div class="post-images">
+                <div th:each="file : ${files}">
+                    <img th:src="'/image/'+${file.getName()}" class="img-fluid">
+                </div>
+            </div>
+            <!--  추천버튼  -->
+            <button class="btn" th:classappend="${liked != null && liked != false ? 'btn-info' : 'btn-outline-info'}" id="likeButton" th:text="'추천 '+${post.getLike()}"></button>
         </div>
     </div>
+    <!-- 수정 버튼 -->
+    <button class="btn btn-outline-success" th:onclick="updatePost([[${post.user.getSeq()}]], [[${user != null ? user.getSeq() : null}]], [[${post.getSeq()}]])">수정</button>
 
+    <!-- 삭제 버튼 -->
+    <button class="btn btn-outline-danger" th:onclick="deletePost([[${post.user.getSeq}]], [[${user != null ? user.getSeq : null}]], [[${post.getSeq}]])">삭제</button>
     <div class="mt-4">
-        <h5>댓글</h5>
+        <h5 th:text="'댓글('+${post.getComment()}+')'">댓글</h5>
         <div class="mb-3">
             <input type="text" class="form-control" placeholder="댓글을 입력하세요">
             <button class="btn btn-outline-primary">댓글 달기</button>
@@ -53,9 +96,15 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var postSeq = /*[[${post.getSeq}]]*/;
+    var userSeq = /*[[${user != null ? user.getSeq : null}]]*/;
+    /*]]>*/
+
     // 댓글 텍스트 클릭 시 대댓글 작성창 토글
     document.querySelectorAll('.comment-text').forEach(commentText => {
         commentText.addEventListener('click', () => {
@@ -70,6 +119,159 @@
             event.stopPropagation();
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var likeButton = document.getElementById('likeButton');
+
+        likeButton.addEventListener('click', function() {
+            if(userSeq == null){
+                alert("로그인이 필요합니다")
+                return ;
+            }else{
+                toggleLikeButtonClass(this);
+            }
+        });
+    });
+
+    function toggleLikeButtonClass(button) {
+        if (button.classList.contains('btn-outline-info')) {
+            button.classList.remove('btn-outline-info');
+            button.classList.add('btn-info');
+            sendLike(postSeq,"post", postSeq)
+                .then(() => updateLikesCount(postSeq))
+                .catch(error => console.error('Erroe: ',error));
+        } else {
+            button.classList.remove('btn-info');
+            button.classList.add('btn-outline-info');
+            deleteLike(postSeq,"post",postSeq)
+                .then(() => updateLikesCount(postSeq))
+                .catch(error => console.error('Error: ',error));
+        }
+    }
+
+    function updateLikesCount(postSeq) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/likes/update/' + postSeq
+        }).done(function(response) {
+            console.log('업데이트된 추천 수:', response);
+            $('#likeButton').text('추천 ' + response);
+        }).fail(function(error) {
+            console.error('추천 수 업데이트 및 조회 실패', error);
+        });
+    }
+
+    /*function sendLike(postSeq, target, targetSeq) {
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/likes',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                postSeq: postSeq,
+                target: target,
+                targetSeq: targetSeq
+            }),
+            dataType: 'json'
+        }).done(function(response) {
+            console.log('추천 저장 성공', response);
+            // 성공 처리 로직
+        }).fail(function(error) {
+            alert("권한이 없습니다")
+            console.log(error)
+            // 실패 처리 로직
+        });
+    }*/
+
+    function sendLike(postSeq, target, targetSeq) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/likes',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    postSeq: postSeq,
+                    target: target,
+                    targetSeq: targetSeq
+                }),
+                dataType: 'json'
+            }).done(function(response) {
+                console.log('추천 저장 성공', response);
+                resolve(response); // AJAX 요청 성공 시 resolve 호출
+            }).fail(function(error) {
+                console.log('추천 저장 실패', error);
+                reject(error); // AJAX 요청 실패 시 reject 호출
+            });
+        });
+    }
+
+    /*function deleteLike(postSeq, target, targetSeq){
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/likes/'+postSeq+'/'+target+'/'+targetSeq,
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (){
+            console.log("추천취소")
+        }).fail(function (error){
+            console.log("메러발생")
+            console.log(error);
+        });
+    }*/
+
+    function deleteLike(postSeq, target, targetSeq) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/likes/' + postSeq + '/' + target + '/' + targetSeq,
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(response) {
+                console.log("추천취소 성공");
+                resolve(response); // AJAX 요청 성공 시 resolve 호출
+            }).fail(function(error) {
+                console.log("추천취소 에러 발생");
+                console.log(error);
+                reject(error); // AJAX 요청 실패 시 reject 호출
+            });
+        });
+    }
+
+    function updatePost(postUserSeq, userSeq, postSeq) {
+        if (userSeq !== null && userSeq == postUserSeq) {
+            location.href = '/posts/update/' + postSeq;
+        } else {
+            alert("권한이 없습니다.");
+        }
+    }
+
+    function deletePost(postUserSeq, userSeq, postSeq) {
+        if (userSeq !== null && userSeq == postUserSeq) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/v1/posts/'+postSeq,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8'
+                }).done(function (){
+                    alert('글이 삭제되었습니다.');
+                    window.location.href = '/';
+                }).fail(function (error){
+                    alert(JSON.stringify(error))
+                });
+            }
+        } else {
+            alert("권한이 없습니다.");
+        }
+    }
+
+
+/*
+    $(document).ready(function() {
+        /!*<![CDATA[*!/
+        var userSeq = /!*[[${user != null ? user.getSeq : null}]]*!/;
+        var postSeq = /!*[[${post.getSeq}]]*!/;
+        /!*]]>*!/
+        updateLikeButton(userSeq, postSeq);
+    });*/
 </script>
 </body>
 </html>

@@ -19,6 +19,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select m from User m where m.socialid = ?1")
     Optional<User> findBySocialid(String socialid);
 
-
-
 }

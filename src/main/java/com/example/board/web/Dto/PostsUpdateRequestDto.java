@@ -3,8 +3,10 @@ package com.example.board.web.Dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor //모든 필드에 기본생성자 생성
 public class PostsUpdateRequestDto {
     private String title;

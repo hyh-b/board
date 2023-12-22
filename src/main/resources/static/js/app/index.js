@@ -14,22 +14,28 @@ var main = {
         });
     },
     save : function () {
-        var data = {
-            title: $('#title').val(),
-            author: $('#author').val(),
-            content: $('#content').val()
-        };
-
+        var formData = new FormData();
+        formData.append('title', $('#title').val());
+        formData.append('content', $('#content').val());
+        console.log("검증시작")
+        if($('#mfiles')[0].files.length > 0) {
+            $.each($('#mfiles')[0].files, function (i, file) {
+                formData.append('mfiles', file);
+                console.log("파일명" + file);
+            });
+        }
+        
         $.ajax({
-            type: 'POST',   //REST에서 CRUD는 다음과 같이 HTTP Method에 매핑 - 생성:POST, 읽기:GET, 수정:PUT, 삭제:DELETE
+            type: 'POST',
             url: '/api/v1/posts',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function (){   //성공시 수행할 메소드
+            processData: false,  // FormData를 사용할 때 필요
+            contentType: false,  // FormData를 사용할 때 필요
+            data: formData
+        }).done(function() {
             alert('글이 등록되었습니다.');
-            window.location.href = '/';   //알림창을 띄운 뒤 '/'경로로 이동
-        }).fail(function (error){
+            window.location.href = '/';
+        }).fail(function(error) {
+            console.log(error);
             alert(JSON.stringify(error));
         });
     },

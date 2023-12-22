@@ -1,20 +1,33 @@
 package com.example.board.web.Dto;
 
 import com.example.board.domain.posts.Posts;
+import com.example.board.domain.user.User;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class PostsResponseDto {
 
-    private Long id;
+    private Long seq;
     private String title;
     private String content;
-    private String author;
+    private User user;
+    private LocalDateTime time;
+    private Integer hit;
+    private Integer like;
+    private Integer comment;
 
     public PostsResponseDto(Posts entity){
-        this.id = entity.getId();
+        this.seq = entity.getSeq();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.author = entity.getAuthor();
+        this.user = entity.getUser();
+        this.time = entity.getTime();
+        this.hit = entity.getHit();
+        this.like = entity.getLike();
+        this.comment = entity.getComment();
     }
 }

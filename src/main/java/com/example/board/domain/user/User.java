@@ -1,5 +1,6 @@
 package com.example.board.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "member")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements Serializable {
 
     @Id
@@ -50,7 +52,8 @@ public class User implements Serializable {
     private String socialid;
 
     @Builder
-    public User(String name, String email, Role role, String social,String id, String password, String socialid){
+    public User(Long seq,String name, String email, Role role, String social,String id, String password, String socialid){
+        this.seq = seq;
         this.name = name;
         this.email = email;
         this.role = role;

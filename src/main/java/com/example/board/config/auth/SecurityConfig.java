@@ -33,6 +33,7 @@ public class SecurityConfig {
                     .authorizeRequests() //URL별 권환 관리 설정
                     /*.antMatchers("/","/css/**","/images/**","/js/**","/h2-console/**","/profile").permitAll()
                     .antMatchers("/api/v1/**").hasRole(Role.USER.name())*/
+                    .antMatchers("/posts/save").authenticated()
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()

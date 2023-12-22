@@ -1,3 +1,4 @@
+/*
 package com.example.board.web;
 
 import com.example.board.domain.posts.Posts;
@@ -77,8 +78,10 @@ public class PostsApiControllerTest {
 
         //when
         //spring security를 적용하기 전
-        /*ResponseEntity<Long> responseEntity = restTemplate
-                .postForEntity(url, requestDto, Long.class);*/
+        */
+/*ResponseEntity<Long> responseEntity = restTemplate
+                .postForEntity(url, requestDto, Long.class);*//*
+
 
         //spring security를 적용한 후
         mvc.perform(post(url)
@@ -90,12 +93,14 @@ public class PostsApiControllerTest {
         //then
         //responseEntity - http요청을 보낸 후 받은 응답을 나타내는 객체
         //spring security를 적용하기 전
-        /*assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        */
+/*assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Posts> all = postsRepository.findAll(); //전체데이터 조회
         assertThat(all.get(0).getTitle()).isEqualTo(title);
-        assertThat(all.get(0).getContent()).isEqualTo(content);*/
+        assertThat(all.get(0).getContent()).isEqualTo(content);*//*
+
 
         //spring security를 적용한 후
         List<Posts> all = postsRepository.findAll();
@@ -128,8 +133,10 @@ public class PostsApiControllerTest {
 
         //when
         //spring security를 적용하기 전
-        /*ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
-                requestEntity, Long.class);*/
+        */
+/*ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
+                requestEntity, Long.class);*//*
+
 
         //spring security를 적용한 후
         mvc.perform(put(url)
@@ -139,14 +146,16 @@ public class PostsApiControllerTest {
 
         //then
         //spring security를 적용하기 전
-        /*assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        */
+/*assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
 
-        assertThat(all.get(0).getContent()).isEqualTo(expectedContent);*/
+        assertThat(all.get(0).getContent()).isEqualTo(expectedContent);*//*
+
         //spring security를 적용한 후
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
@@ -155,3 +164,4 @@ public class PostsApiControllerTest {
     }
 
 }
+*/

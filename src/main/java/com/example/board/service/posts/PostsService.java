@@ -24,26 +24,29 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional   //메서드의 시작과 끝에 트랜젝션을 시작하고 종료/ 트랜잭션 관리
-    public Long save(PostsSaveRequestDto requestDto){
+    public Posts save(PostsSaveRequestDto requestDto){
 
-        return postsRepository.save(requestDto.toEntity()).getId();
+        return postsRepository.save(requestDto.toEntity());
     }
 
     @Transactional
-    public Long update(Long id, PostsUpdateRequestDto requestDto){
-        Posts posts = postsRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
+    public void update(Long seq, PostsUpdateRequestDto requestDto){
+        Posts posts = postsRepository.findById(seq).
+                orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+seq));
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
-
-        return id;
     }
 
-    public PostsResponseDto findById(Long id){
-        Posts entity = postsRepository.findById(id).orElseThrow(() -> new
-                IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+    public PostsResponseDto findById(Long seq){
+        Posts entity = postsRepository.findById(seq).orElseThrow(() -> new
+                IllegalArgumentException("해당 게시글이 없습니다. id=" + seq));
 
         return new PostsResponseDto(entity);
+    }
+
+    public Posts getPostById(Long seq) {
+        return postsRepository.findById(seq)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + seq));
     }
 
     @Transactional(readOnly = true)  //(readOnly = true)옵션 - 조회기능만 남겨둔다. 그에 따라 조회속도 개선
@@ -55,14 +58,21 @@ public class PostsService {
     }
 
     @Transactional
-    public void delete (Long id){
-        Posts posts = postsRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
+    public void delete (Long seq){
+        Posts posts = postsRepository.findById(seq)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+ seq));
 
         postsRepository.delete(posts); //JpaRepository에서 delete 메소드를 지원
     }
 
     public Page<Posts> findAll(Pageable pageable){
         return postsRepository.findAll(pageable);
+    }
+
+    public void increaseHitCount(Long pSeq){
+        Posts posts = postsRepository.findById(pSeq)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. pSeq="+ pSeq));
+        posts.setHit(posts.getHit()+1);
+        postsRepository.save(posts);
     }
 }

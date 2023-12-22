@@ -1,22 +1,22 @@
 package com.example.board.web.Dto;
 
 import com.example.board.domain.posts.Posts;
+import com.example.board.domain.user.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class PostsListResponseDto {
-    private Long id;
+    private Long seq;
     private String title;
-    private String author;
+    private User user;
     private LocalDateTime modifiedDate;
 
     public PostsListResponseDto(Posts entity){
-        this.id = entity.getId();
+        this.seq = entity.getSeq();
         this.title = entity.getTitle();
-        this.author = entity.getAuthor();
-        this.modifiedDate = entity.getModifiedDate();
+        this.user = entity.getUser();
     }
 
 }

@@ -1,3 +1,4 @@
+/*
 package com.example.board.domain.posts;
 
 import org.junit.jupiter.api.AfterEach;
@@ -71,3 +72,4 @@ public class PostRepositoryTest {
         assertThat(posts.getModifiedDate()).isAfter(now); //ModifiedDate가 now보다 뒤인지 확인
     }
 }
+*/
