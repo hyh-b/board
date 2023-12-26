@@ -59,6 +59,7 @@
             <div class="post-images">
                 <div th:each="file : ${files}">
                     <img th:src="'/image/'+${file.getName()}" class="img-fluid">
+                    <!--<img src="'/image/asd.jpg" class="img-fluid">-->
                 </div>
             </div>
             <!--  추천버튼  -->
@@ -70,11 +71,12 @@
 
     <!-- 삭제 버튼 -->
     <button class="btn btn-outline-danger" th:onclick="deletePost([[${post.user.getSeq}]], [[${user != null ? user.getSeq : null}]], [[${post.getSeq}]])">삭제</button>
+
     <div class="mt-4">
         <h5 th:text="'댓글('+${post.getComment()}+')'">댓글</h5>
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="댓글을 입력하세요">
-            <button class="btn btn-outline-primary">댓글 달기</button>
+            <input type="text" class="form-control" id="commentContent" placeholder="댓글을 입력하세요">
+            <button class="btn btn-outline-primary" id="submitComment">댓글 달기</button>
         </div>
         <div class="divider"></div>
         <!-- 예시 댓글 -->
@@ -133,6 +135,25 @@
         });
     });
 
+    document.getElementById('submitComment').addEventListener('click', function() {
+        var commentContent = document.getElementById('commentContent').value;
+        console.log("tlwkr"+postSeq);
+        $.ajax({
+            url: '/api/v1/comment/'+postSeq,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                content: commentContent
+            }),
+            success: function(response) {
+                alert("댓글등록 성공")
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: " + error);
+            }
+        });
+    });
+
     function toggleLikeButtonClass(button) {
         if (button.classList.contains('btn-outline-info')) {
             button.classList.remove('btn-outline-info');
@@ -161,27 +182,6 @@
         });
     }
 
-    /*function sendLike(postSeq, target, targetSeq) {
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/likes',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                postSeq: postSeq,
-                target: target,
-                targetSeq: targetSeq
-            }),
-            dataType: 'json'
-        }).done(function(response) {
-            console.log('추천 저장 성공', response);
-            // 성공 처리 로직
-        }).fail(function(error) {
-            alert("권한이 없습니다")
-            console.log(error)
-            // 실패 처리 로직
-        });
-    }*/
-
     function sendLike(postSeq, target, targetSeq) {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -203,19 +203,6 @@
             });
         });
     }
-
-    /*function deleteLike(postSeq, target, targetSeq){
-        $.ajax({
-            type: 'DELETE',
-            url: '/api/v1/likes/'+postSeq+'/'+target+'/'+targetSeq,
-            contentType: 'application/json; charset=utf-8'
-        }).done(function (){
-            console.log("추천취소")
-        }).fail(function (error){
-            console.log("메러발생")
-            console.log(error);
-        });
-    }*/
 
     function deleteLike(postSeq, target, targetSeq) {
         return new Promise((resolve, reject) => {
@@ -263,15 +250,6 @@
         }
     }
 
-
-/*
-    $(document).ready(function() {
-        /!*<![CDATA[*!/
-        var userSeq = /!*[[${user != null ? user.getSeq : null}]]*!/;
-        var postSeq = /!*[[${post.getSeq}]]*!/;
-        /!*]]>*!/
-        updateLikeButton(userSeq, postSeq);
-    });*/
 </script>
 </body>
 </html>
