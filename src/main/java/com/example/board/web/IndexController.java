@@ -2,11 +2,13 @@ package com.example.board.web;
 
 import com.example.board.config.auth.CustomOAuth2UserService;
 import com.example.board.config.auth.CustomUserDetailService;
+import com.example.board.domain.comment.Comment;
 import com.example.board.domain.likes.Likes;
 import com.example.board.domain.likes.LikesRepository;
 import com.example.board.domain.posts.Files;
 import com.example.board.domain.posts.Posts;
 import com.example.board.domain.user.User;
+import com.example.board.service.comment.CommentService;
 import com.example.board.service.posts.FilesService;
 import com.example.board.service.posts.LikesService;
 import com.example.board.service.posts.PostsService;
@@ -39,8 +41,7 @@ public class IndexController {
     private final UserService userService;
     private final FilesService filesService;
     private final LikesService likesService;
-    private final LikesRepository likesRepository;
-
+    private  final CommentService commentService;
     @GetMapping("/")
     public String index(Model model,  @RequestParam(defaultValue = "0") int page){
         int size = 10;
@@ -80,6 +81,9 @@ public class IndexController {
 
         List<Files> files = filesService.loadFiles(seq);
         model.addAttribute("files",files);
+
+        List<Comment> comment = commentService.getComment(seq);
+        model.addAttribute("comment",comment);
 
         return "posts-view";
     }

@@ -21,7 +21,6 @@ public class LikesService {
     }
 
     public Likes saveLike(LikesSaveRequestDto dto){
-        System.out.println("순서확인-likeService.saveLike");
         return likesRepository.save(dto.toEntity());
     }
 
@@ -29,7 +28,6 @@ public class LikesService {
         Likes likes = likesRepository.findLikes(mSeq,pSeq,target,targetSeq);
 
         likesRepository.delete(likes);
-        System.out.println("순서확인-likeService.deleteLike");
     }
 
     public void updateLikesCount(Long pSeq) {
@@ -38,6 +36,5 @@ public class LikesService {
                 .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + pSeq));
         post.setLike(count);
         postsRepository.save(post);
-        System.out.println("순서확인-likeservice.updateLikesCount() count="+count);
     }
 }

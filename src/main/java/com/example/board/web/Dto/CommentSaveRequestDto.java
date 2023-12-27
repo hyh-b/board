@@ -10,15 +10,7 @@ import lombok.Setter;
 @Setter
 public class CommentSaveRequestDto {
 
-    private Posts posts;
-    private User user;
+    private Long postSeq;
     private String content;
 
-    public Comment toEntity(){
-        return Comment.builder()
-                .posts(posts)
-                .user(user)
-                .content(content)
-                .build();
-    }
 }

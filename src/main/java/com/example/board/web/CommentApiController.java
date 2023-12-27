@@ -1,5 +1,6 @@
 package com.example.board.web;
 
+import com.example.board.domain.comment.Comment;
 import com.example.board.domain.posts.Posts;
 import com.example.board.domain.user.User;
 import com.example.board.service.comment.CommentService;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 public class CommentApiController {
@@ -17,13 +20,9 @@ public class CommentApiController {
     private final UserService userService;
     private final PostsService postsService;
 
-    @PostMapping("/api/v1/comment/{postSeq}")
-    public ResponseEntity<?> saveComment( @PathVariable Long postSeq, @RequestBody CommentSaveRequestDto requestDto) {
-        User currentUser = userService.getCurrentUser();
-        requestDto.setUser(currentUser);
-        Posts posts = postsService.getPostById(postSeq);
-        requestDto.setPosts(posts);
-        commentService.saveComment(requestDto);
-        return ResponseEntity.ok().build();
+    @PostMapping("/api/v1/comment/save")
+    public ResponseEntity<?> saveComment(@RequestBody CommentSaveRequestDto requestDto) {
+        Comment newComment = commentService.saveComment(requestDto);
+        return ResponseEntity.ok(newComment);
     }
 }
