@@ -17,7 +17,6 @@ var main = {
         var formData = new FormData();
         formData.append('title', $('#title').val());
         formData.append('content', $('#content').val());
-        console.log("검증시작")
         if($('#mfiles')[0].files.length > 0) {
             $.each($('#mfiles')[0].files, function (i, file) {
                 formData.append('mfiles', file);

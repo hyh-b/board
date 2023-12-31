@@ -7,11 +7,13 @@ import com.example.board.domain.likes.Likes;
 import com.example.board.domain.likes.LikesRepository;
 import com.example.board.domain.posts.Files;
 import com.example.board.domain.posts.Posts;
+import com.example.board.domain.reply.Reply;
 import com.example.board.domain.user.User;
 import com.example.board.service.comment.CommentService;
 import com.example.board.service.posts.FilesService;
 import com.example.board.service.posts.LikesService;
 import com.example.board.service.posts.PostsService;
+import com.example.board.service.reply.ReplyService;
 import com.example.board.service.user.UserService;
 import com.example.board.utils.PagingUtils;
 import com.example.board.web.Dto.PostsResponseDto;
@@ -31,7 +33,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Controller
@@ -42,6 +46,7 @@ public class IndexController {
     private final FilesService filesService;
     private final LikesService likesService;
     private  final CommentService commentService;
+    private final ReplyService replyService;
     @GetMapping("/")
     public String index(Model model,  @RequestParam(defaultValue = "0") int page){
         int size = 10;
@@ -73,6 +78,8 @@ public class IndexController {
         User currentUser = userService.getCurrentUser();
         if(currentUser !=null){
             boolean liked = likesService.hasUserLikedPost(currentUser.getSeq(),seq, "post", seq);
+            Set<Long> likedCommentSeq = commentService.getLikedCommentSeq(currentUser.getSeq(), seq);
+            model.addAttribute("likedCommentSeq", likedCommentSeq);
             model.addAttribute("liked",liked);
             model.addAttribute("user", currentUser);
         }
@@ -84,6 +91,9 @@ public class IndexController {
 
         List<Comment> comment = commentService.getComment(seq);
         model.addAttribute("comment",comment);
+
+        List<Reply> replyList = replyService.findReplyByPostSeq(seq);
+        model.addAttribute("replyList", replyList);
 
         return "posts-view";
     }

@@ -1,9 +1,11 @@
 package com.example.board.web;
 
+import com.example.board.domain.comment.CommentRepository;
 import com.example.board.domain.likes.Likes;
 import com.example.board.domain.likes.LikesRepository;
 import com.example.board.domain.posts.Posts;
 import com.example.board.domain.user.User;
+import com.example.board.service.comment.CommentService;
 import com.example.board.service.posts.LikesService;
 import com.example.board.service.posts.PostsService;
 import com.example.board.service.user.UserService;
@@ -22,6 +24,8 @@ public class LikesApiController {
     private final LikesService likesService;
     private final PostsService postsService;
     private final UserService userService;
+    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @GetMapping("/api/v1/likes/{postSeq}/{userSeq}")
     public ResponseEntity<?> checkUserLike(@PathVariable Long postSeq, @PathVariable Long userSeq){
@@ -60,7 +64,14 @@ public class LikesApiController {
     public ResponseEntity<?> updateLikesCount(@PathVariable Long pSeq) {
         likesService.updateLikesCount(pSeq);
         int likeCount = postsService.findById(pSeq).getLike();
-        System.out.println("순서확인-likeController.updateLikeCount likeCount="+likeCount);
+
+        return ResponseEntity.ok(likeCount);
+    }
+
+    @GetMapping("/api/v1/likes/comment/update/{pSeq}/{commentSeq}")
+    public ResponseEntity<?> updateCommentLikesCount(@PathVariable Long pSeq, @PathVariable Long commentSeq) {
+        likesService.updateCommentLikesCount(pSeq, commentSeq);
+        int likeCount = commentService.findById(commentSeq).getLike();
 
         return ResponseEntity.ok(likeCount);
     }

@@ -6,57 +6,7 @@
     <title>게시물 상세보기</title>
     <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        header a{
-            text-align: center;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .container { max-width: 60%; }
-        .divider { border-bottom: 1px solid #eaeaea; margin: 20px 0; }
-        .reply-input, .sub-comment { display: none; margin-left: 20px; }
-        .comment-text { cursor: pointer; }
-        .sub-comment { display: block; }
-        .sub-comment:before { content: "ㄴ "; }
-        .card-body {
-            min-height: 500px;
-            position: relative;
-        }
-        .post-content {
-            margin-bottom: 20px; /* 내용과 이미지 사이의 간격 */
-        }
-        .post-images img {
-            max-width: 100%; /* 이미지가 컨테이너 너비를 넘지 않도록 설정 */
-            height: auto; /* 이미지 비율 유지 */
-            margin-bottom: 60px; /* 이미지와 추천 버튼 사이의 간격 */
-        }
-        #likeButton {
-            display: block; /* 버튼을 블록 요소로 만들어 줄 전체를 차지하게 합니다. */
-            margin: 0 auto; /* 상하 마진은 0, 좌우 마진은 자동으로 설정하여 가운데 정렬합니다. */
-            position: absolute; /* 절대적 위치 설정 */
-            bottom: 10px; /* 아래에서 10px의 위치에 버튼을 배치 */
-            left: 50%; /* 왼쪽에서 50% 위치에 배치 */
-        }
-
-        .comment-container {
-            margin-bottom: 15px;
-        }
-
-        .comment-content {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px; /* 댓글과 대댓글 입력창 사이의 간격 */
-        }
-
-        .comment-time {
-            margin-left: auto; /* 왼쪽 요소들로부터 자동으로 여백을 생성하여 오른쪽에 위치시킴 */
-        }
-
-        .comment-like-button {
-            margin-left: 10px;
-        }
-
-    </style>
+    <link href="/css/posts-view.css" rel="stylesheet">
 </head>
 <body>
 
@@ -98,22 +48,27 @@
             <button class="btn btn-outline-primary" id="submitComment">댓글 달기</button>
         </div>
         <div class="divider" id="comment-container">
-            <!-- 예시 댓글 -->
+            <!-- 댓글 -->
             <div class="mb-3 comment-container" id="comment" th:each="comments : ${comment}">
                 <div class="comment-content">
                     <strong th:text="${comments.getUser().getName()}+':'">김철수:</strong>
                     <span class="comment-text" th:text="${comments.getContent()}">좋은 글 감사합니다!</span>
-                    <button class="btn btn-outline-info comment-like-button" th:data-seq="${comments.getSeq()}" th:id="'commentLike' + ${comments.getSeq()}" th:text="'추천 '+${comments.getLike()}">추천 0</button>
+                    <button class="btn comment-like-button" th:classappend="${likedCommentSeq != null && likedCommentSeq.contains(comments.getSeq()) ? 'btn-info' : 'btn-outline-info'}" th:data-seq="${comments.getSeq()}" th:id="'commentLike' + ${comments.getSeq()}" th:text="'추천 '+${comments.getLike()}">추천 0</button>
                     <span class="comment-time" th:text="${comments.getTime()}"></span>
                 </div>
                 <!-- 대댓글 입력창-->
                 <div class="reply-input" id="reply">
-                    <input type="text" class="form-control" placeholder="대댓글을 입력하세요">
-                    <button class="btn btn-outline-primary">답글 달기</button>
+                    <input type="text" th:id = "'reply'+${comments.getSeq()}" class="form-control" placeholder="답글을 입력하세요">
+                    <button class="btn btn-outline-primary" th:data-seq="${comments.getSeq()}" th:id="'replyButton' + ${comments.getSeq()}">답글 달기</button>
                 </div>
-                <div class="sub-comment">
-                    <strong>홍길동:</strong> 감사합니다!
+                <div th:id="'replyDiv'+${comments.getSeq()}" th:each="reply : ${replyList}">
+
+                    <div class="sub-comment" th:if="${reply.getComment().getSeq()} == ${comments.getSeq()}">
+                        <strong th:text="${reply.getUser().getName()} + ':'"></strong>
+                        <span th:text="${reply.getContent()}"></span>
+                    </div>
                 </div>
+
             </div>
         </div>
 

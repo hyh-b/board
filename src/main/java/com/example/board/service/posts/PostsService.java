@@ -75,4 +75,10 @@ public class PostsService {
         posts.setHit(posts.getHit()+1);
         postsRepository.save(posts);
     }
+
+    public void updateCommentCount(Long pSeq){
+        postsRepository.updateCommentCount(pSeq);
+    }
+
+
 }

@@ -53,6 +53,8 @@ document.getElementById('submitComment').addEventListener('click', function() {
 
                 alert("댓글등록 성공")
                 addCommentToView(newComment.user.name,newComment.content,newComment.seq,newComment.like);
+                console.log("문제찾기1")
+                updateCommentCount(postSeq);
             },
             error: function(xhr, status, error) {
                 console.error("Error occurred: " + error);
@@ -61,6 +63,47 @@ document.getElementById('submitComment').addEventListener('click', function() {
     }else{
         alert("로그인이 필요합니다")
     }
+});
+
+/*ㅡㅡㅡㅡ 답글버튼 ㅡㅡㅡㅡ*/
+$(document).ready(function() {
+    $('button[id^="replyButton"]').click(function() {
+        var commentSeq = $(this).data('seq');
+        var replyContent = $('#reply' + commentSeq).val();
+
+        if (!replyContent) {
+            alert('답글을 입력하세요.');
+            return;
+        }
+
+        $.ajax({
+            url: '/api/v1/reply/save',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                commentSeq: commentSeq,
+                content: replyContent
+            }),
+            success: function(response) {
+                console.log('답글 저장 성공');
+
+                var newReplyHtml = '<div class="sub-comment">' +
+                    '<strong>' + response.user.name + ':</strong> ' +
+                    '<span>' + response.content + '</span>' +
+                    '</div>';
+
+                // 새로운 답글을 코멘트에 해당하는 위치에 추가
+                $('#replyDiv' + commentSeq).append(newReplyHtml);
+
+                // 입력 필드 초기화
+                $('#reply' + commentSeq).val('');
+            },
+            error: function(error) {
+                console.error('답글 저장 실패', error);
+                // 실패 시 에러 처리
+            }
+        });
+    });
 });
 
 // 댓글등록 후 앳글업데이트
@@ -96,11 +139,15 @@ function toggleCommentLikeButtonClass(button) {
     if (button.classList.contains('btn-outline-info')) {
         button.classList.remove('btn-outline-info');
         button.classList.add('btn-info');
-        console.log("데이터1: "+commentSeq);
-        sendLike(postSeq,"comment",commentSeq);
+        sendLike(postSeq,"comment",commentSeq)
+            .then(() => updateCommentLikesCount(postSeq, commentSeq))
+            .catch(error => console.error('Erroe: ',error));
     } else {
         button.classList.remove('btn-info');
         button.classList.add('btn-outline-info');
+        deleteLike(postSeq,"comment",commentSeq)
+            .then(() => updateCommentLikesCount(postSeq, commentSeq))
+            .catch(error => console.error('Erroe: ',error));
 
     }
 }
@@ -122,6 +169,19 @@ function toggleLikeButtonClass(button) {
     }
 }
 
+function updateCommentLikesCount(postSeq, commentSeq) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/likes/comment/update/' + postSeq + '/' + commentSeq
+    }).done(function(response) {
+        console.log('업데이트된 추천 수:', response);
+        console.log("코멘트에스이큐"+commentSeq);
+        $('#commentLike'+commentSeq).text('추천 ' + response);
+    }).fail(function(error) {
+        console.error('추천 수 업데이트 및 조회 실패', error);
+    });
+}
+
 function updateLikesCount(postSeq) {
     $.ajax({
         type: 'GET',
@@ -134,9 +194,19 @@ function updateLikesCount(postSeq) {
     });
 }
 
+function updateCommentCount(postSeq) {
+    $.ajax({
+        type: 'PATCH',
+        url: '/api/v1/comment/count/' + postSeq
+    }).done(function(response) {
+        console.log("댓글수 업데이트")
+    }).fail(function(error) {
+        console.error('댓글 수 업데이트 및 조회 실패', error);
+    });
+}
+
 function sendLike(postSeq, target, targetSeq) {
     return new Promise((resolve, reject) => {
-        console.log("데이터2: "+targetSeq);
         $.ajax({
             type: 'POST',
             url: '/api/v1/likes',

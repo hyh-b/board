@@ -25,4 +25,10 @@ public class CommentApiController {
         Comment newComment = commentService.saveComment(requestDto);
         return ResponseEntity.ok(newComment);
     }
+
+    @PatchMapping("/api/v1/comment/count/{pSeq}")
+    public ResponseEntity<?> countComment(@PathVariable Long pSeq){
+        postsService.updateCommentCount(pSeq);
+        return ResponseEntity.ok().build();
+    }
 }

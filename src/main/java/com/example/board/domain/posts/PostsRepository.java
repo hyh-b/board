@@ -2,7 +2,9 @@ package com.example.board.domain.posts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,4 +20,15 @@ public interface PostsRepository extends JpaRepository<Posts,Long> {
     List<Posts> findAllDesc();
 
     Page<Posts> findAll(Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Posts p SET p.comment = (SELECT COUNT(c) FROM Comment c WHERE c.posts.seq = :pSeq) WHERE p.seq = :pSeq")
+    void updateCommentCount(Long pSeq);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Posts p SET p.like = (SELECT COUNT(l) FROM Likes l WHERE l.posts.seq = :pSeq AND l.target = :target AND l.targetSeq = :targetSeq) WHERE p.seq = :pSeq")
+    void updateLikesCount(Long pSeq, String target, Long targetSeq);
+
 }

@@ -84,7 +84,12 @@
             <tr th:each="post : ${posts}">
                 <td th:text="${post.getSeq()}"></td>
                 <td>
-                    <a th:href="@{/posts/view/{seq}(seq=${post.getSeq()})}" th:text="${post.title}"></a>
+                    <!--<a th:href="@{/posts/view/{seq}(seq=${post.getSeq()})}" th:text="${post.title}"></a>-->
+
+                    <a th:href="@{/posts/view/{seq}(seq=${post.getSeq()})}">
+                        <span th:if="${post.comment == 0}" th:text="${post.title}"></span>
+                        <span th:unless="${post.comment == 0}" th:text="${post.title + ' (' + post.comment + ')'}"></span>
+                    </a>
                 </td>
                 <td th:text="${post.getUser().getName()}"></td>
                 <td th:text="${post.getHit()}"></td>
