@@ -28,12 +28,10 @@ public class Comment implements Serializable {
     @Column(name = "c_seq")
     private Long seq;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_seq")
     private Posts posts;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "m_seq")
     private User user;

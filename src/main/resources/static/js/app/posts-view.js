@@ -53,7 +53,6 @@ document.getElementById('submitComment').addEventListener('click', function() {
 
                 alert("댓글등록 성공")
                 addCommentToView(newComment.user.name,newComment.content,newComment.seq,newComment.like);
-                console.log("문제찾기1")
                 updateCommentCount(postSeq);
             },
             error: function(xhr, status, error) {
@@ -85,10 +84,9 @@ $(document).ready(function() {
                 content: replyContent
             }),
             success: function(response) {
-                console.log('답글 저장 성공');
 
                 var newReplyHtml = '<div class="sub-comment">' +
-                    '<strong>' + response.user.name + ':</strong> ' +
+                    '<strong>' + response.userName + ':</strong> ' +
                     '<span>' + response.content + '</span>' +
                     '</div>';
 
