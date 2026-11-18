@@ -1,0 +1,10 @@
+name: kosswise-scan
+on: [push, workflow_dispatch]
+jobs:
+  scan:
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v4
+      # - run: ./gradlew build        # 빌드가 있으면 스캔 앞에
+      - name: 오픈소스 스캔
+        run: '"$HOME/kosswise/kosswise-scan/scan.sh" "$GITHUB_WORKSPACE" "dev_cicd_test"'
